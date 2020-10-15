@@ -1,30 +1,38 @@
 
 
 let game;
+let nameP;  //顯示粒子增量
 
 
 function setup() {
+    let defaultInc=50;
+    createDiv('粒子遞增(遞減)量：');
+    slider = createSlider(0, 100, defaultInc);
+    slider.position(150, 0);
+    slider.style('width', '300px');
+    nameP=createDiv(' '+defaultInc);
+    createDiv('功能鍵： + ,- , g , p, 上下左右方向鍵');
+    
     createCanvas(600, 600);
     background(255);
     strokeWeight(1);
     textSize(32);
     
     
-    game=new Game(600);
+    game=new Game(1000);
     game.drawTree=!true;
     
 }
 
 
 function draw() {
-    updateKey();    
     if( game.pause )  return;    
     
+    box0Control();
+    
+    
     background(220);
-    
-    
     game.update();
-    
     game.draw();
     
     
@@ -32,6 +40,7 @@ function draw() {
     fill(c);
     text('fps='+getFPS(), 10, 30);
     text('total='+game.objs.length+"  particles",10,60);
+    nameP.html(slider.value());
 }
 
 
@@ -46,10 +55,6 @@ function getFPS(){
     return fps;
 }
 
-
-function updateKey(){
-    box0Control();
-}
 
 
 function box0Control(){
@@ -74,10 +79,13 @@ function box0Control(){
     if (keyIsDown(DOWN_ARROW)) {
         box.y += 5;
     }    
+    
 }
 
 
 function keyPressed() {
+    let n=slider.value();
+    
     if(key=='p'){
         game.pause= !game.pause;
     }
@@ -86,17 +94,14 @@ function keyPressed() {
         game.drawTree= !game.drawTree;
     }
     
+
+    
     if(key=='+'){
-        game.addParticles(100);
+        game.addParticles(n);
     }
     
     if(key=='-'){
-        let succ=false;
-        let n=100;
-        do{
-            succ=game.deleteParticles(n);
-            n/=2;
-        }while( !succ);
+        game.deleteParticles(n);
     }
  
 }
