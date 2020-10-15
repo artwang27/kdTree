@@ -38,6 +38,7 @@ class Game{
     }
     
     
+    
     update(){
         for(let obj of this.objs){
             obj.move();

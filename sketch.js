@@ -12,7 +12,9 @@ function setup() {
     slider.style('width', '300px');
     nameP=createDiv(' '+defaultInc);
     createDiv('功能鍵： + ,- , g , p, 上下左右方向鍵');
-    
+
+
+
     createCanvas(600, 600);
     background(255);
     strokeWeight(1);
@@ -22,14 +24,29 @@ function setup() {
     game=new Game(1000);
     game.drawTree=!true;
     
+    button1 = createButton('增加粒子');
+    button1.position(19, 600);
+    button1.mousePressed( incParticles );
+    
+    button2 = createButton('減少粒子');
+    button2.position(119, 600);
+    button2.mousePressed( decParticles );
+
+    button3 = createButton('顯示 KD tree');
+    button3.position(239, 600);
+    button3.mousePressed( toggleGrid );
+
+    button4 = createButton(' 暫　　停 ');
+    button4.position(369, 600);
+    button4.mousePressed( togglePause );
+    
 }
 
 
 function draw() {
     if( game.pause )  return;    
     
-    box0Control();
-    
+    box0Control();    
     
     background(220);
     game.update();
@@ -82,27 +99,43 @@ function box0Control(){
     
 }
 
-
+//keyPressed 是 p5js 內建函數
 function keyPressed() {
-    let n=slider.value();
     
     if(key=='p'){
-        game.pause= !game.pause;
+        togglePause();
     }
-    
-    if(key=='g'){
-        game.drawTree= !game.drawTree;
-    }
-    
 
+    if(key=='g'){
+        toggleGrid();
+    }
     
     if(key=='+'){
-        game.addParticles(n);
+        incParticles();
     }
     
     if(key=='-'){
-        game.deleteParticles(n);
+        decParticles();
     }
- 
+    
 }
 
+
+function incParticles(){
+    let count=slider.value();
+    game.addParticles(count)
+}
+
+
+function decParticles(){
+    let count=slider.value();
+    game.deleteParticles(count)
+}
+
+function togglePause(){
+    game.pause= !game.pause;    
+}
+
+function toggleGrid(){
+    game.drawTree= !game.drawTree;
+}
